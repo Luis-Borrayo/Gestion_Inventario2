@@ -1,0 +1,82 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/layout.xhtml">
+
+    <ui:define name="content">
+        <h1>📊 Dashboard</h1>
+
+        <h:form id="dashboardForm">
+            <!-- Botón para cargar datos de prueba -->
+            <p:panel header="⚙️ Administración" style="margin-bottom:1rem;backdrop-filter:blur(8px);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2);">
+                <p:commandButton value="Cargar Datos de Prueba"
+                                 icon="pi pi-database"
+                                 action="#{adminBean.cargarDatosSemilla}"
+                                 update="dashboardForm"
+                                 styleClass="p-button-warning"
+                                 style="margin-bottom:1rem;"/>
+                <p:growl id="messages" showDetail="true"/>
+            </p:panel>
+
+            <!-- KPIs -->
+            <p:panelGrid columns="3" layout="grid" style="width: 100%;">
+                <p:panel header="Total Productos"
+                         style="backdrop-filter:blur(10px);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;">
+                    <h:outputText value="#{dashboardBean.totalProductos}"
+                                  style="font-size: 2rem; font-weight: bold;">
+                        <f:convertNumber type="number"/>
+                    </h:outputText>
+                </p:panel>
+
+                <p:panel header="Stock Bajo (≤ 10)"
+                         style="backdrop-filter:blur(10px);background:rgba(255,100,100,0.2);border:1px solid rgba(255,255,255,0.2);color:white;">
+                    <h:outputText value="#{dashboardBean.productosStockBajo}"
+                                  style="font-size: 2rem; font-weight: bold; color: #ff6b6b;">
+                        <f:convertNumber type="number"/>
+                    </h:outputText>
+                </p:panel>
+
+                <p:panel header="Productos Inactivos"
+                         style="backdrop-filter:blur(10px);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;">
+                    <h:outputText value="#{dashboardBean.productosInactivos}"
+                                  style="font-size: 2rem; font-weight: bold;">
+                        <f:convertNumber type="number"/>
+                    </h:outputText>
+                </p:panel>
+
+                <p:panel header="Total Categorías"
+                         style="backdrop-filter:blur(10px);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;">
+                    <h:outputText value="#{dashboardBean.totalCategorias}"
+                                  style="font-size: 2rem; font-weight: bold;">
+                        <f:convertNumber type="number"/>
+                    </h:outputText>
+                </p:panel>
+
+                <p:panel header="Movimientos esta semana"
+                         style="backdrop-filter:blur(10px);background:rgba(100,255,100,0.2);border:1px solid rgba(255,255,255,0.2);color:white;">
+                    <h:outputText value="#{dashboardBean.movimientosEstaSemana}"
+                                  style="font-size: 2rem; font-weight: bold; color: #51cf66;">
+                        <f:convertNumber type="number"/>
+                    </h:outputText>
+                </p:panel>
+
+                <p:panel header="Última actualización"
+                         style="backdrop-filter:blur(10px);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;">
+                    <h:outputText value="#{dashboardBean.fechaActualizacion}"
+                                  style="font-size: 1.5rem; font-weight: bold;">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                    </h:outputText>
+                </p:panel>
+            </p:panelGrid>
+
+            <!-- Botón de actualizar -->
+            <p:commandButton value="Actualizar Dashboard"
+                             icon="pi pi-refresh"
+                             update="dashboardForm"
+                             styleClass="p-button-info"
+                             style="margin-top:1rem;"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

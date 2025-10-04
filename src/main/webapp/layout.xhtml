@@ -76,10 +76,14 @@
     <div class="layout-topbar">
         <h:form>
             <p:menubar style="background: transparent; border: none;">
-                <p:menuitem value="Dashboard" icon="pi pi-home" url="#{request.contextPath}/inventario/dashboard.xhtml"/>
-                <p:menuitem value="Productos" icon="pi pi-box" url="#{request.contextPath}/inventario/productos.xhtml"/>
-                <p:menuitem value="Categorías" icon="pi pi-tags" url="#{request.contextPath}/inventario/categorias.xhtml"/>
-                <p:menuitem value="Movimientos" icon="pi pi-arrows-h" url="#{request.contextPath}/inventario/movimientos.xhtml"/>
+                <p:menuitem value="Dashboard" icon="pi pi-home"
+                            outcome="#{request.contextPath}dashboard.xhtml?faces-redirect=true"/>
+                <p:menuitem value="Productos" icon="pi pi-box"
+                            outcome="#{request.contextPath}productos.xhtml?faces-redirect=true"/>
+                <p:menuitem value="Categorías" icon="pi pi-tags"
+                            outcome="#{request.contextPath}categorias.xhtml?faces-redirect=true"/>
+                <p:menuitem value="Movimientos" icon="pi pi-arrows-h"
+                            outcome="#{request.contextPath}movimientos.xhtml?faces-redirect=true"/>
             </p:menubar>
         </h:form>
     </div>
