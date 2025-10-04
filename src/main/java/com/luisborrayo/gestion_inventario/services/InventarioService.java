@@ -88,8 +88,6 @@ public class InventarioService {
         return categoriaRepository.findAll();
     }
 
-    // ==================== MOVIMIENTOS DE STOCK ====================
-
     @Transactional
     public MovimientoStock registrarEntrada(Long productoId, Integer cantidad, String motivo) {
         return movimientoStockRepository.registrarEntrada(productoId, cantidad, motivo);
@@ -104,8 +102,6 @@ public class InventarioService {
                                                    LocalDate fechaDesde, LocalDate fechaHasta) {
         return movimientoStockRepository.listarConFiltros(productoId, tipo, fechaDesde, fechaHasta);
     }
-
-    // ==================== DASHBOARD / KPIs ====================
 
     public long totalProductos() {
         return dashboardService.getTotalProductos();

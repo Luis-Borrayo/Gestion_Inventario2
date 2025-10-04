@@ -13,10 +13,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Repository para Movimientos de Stock
- */
-
 @ApplicationScoped
 public class MovimientoStockRepository {
 
@@ -51,7 +47,6 @@ public class MovimientoStockRepository {
         movimiento.setFecha(LocalDate.now());
         em.persist(movimiento);
 
-        // LÍNEA VERDE: Actualizar stockActual del producto
         Productos producto = em.find(Productos.class, productoId);
         if (producto != null) {
             producto.setStock(producto.getStock() + cantidad);
