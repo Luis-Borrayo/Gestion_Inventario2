@@ -1,6 +1,7 @@
 package com.luisborrayo.gestion_inventario.repositories;
 
 import com.luisborrayo.gestion_inventario.models.Categoria;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -10,11 +11,11 @@ import jakarta.transaction.Transactional;
 
 import java.util.List;
 
+@ApplicationScoped
 public class CategoriaRepository {
     @PersistenceContext
     private EntityManager em;
 
-    //CRUD simple.
     @Transactional
     public void save(Categoria categoria) {
         if (categoria.getId() == null) {
@@ -36,7 +37,6 @@ public class CategoriaRepository {
         }
     }
 
-    // 🔹 Total de categorías
     public long count() {
         return em.createQuery("SELECT COUNT(c) FROM Categoria c", Long.class)
                 .getSingleResult();
@@ -50,7 +50,6 @@ public class CategoriaRepository {
         return em.createQuery("SELECT COUNT(c) FROM  Categoria c", Long.class).getSingleResult();
     }
 
-    // KPI: Total de categorías (LÍNEA AZUL)
     public Long getTotalCategorias() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);

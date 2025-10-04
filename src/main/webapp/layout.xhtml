@@ -32,7 +32,7 @@
         }
 
         .layout-content h1 {
-            color: white;
+            color: #0f172a;
             text-align: center;
             margin-bottom: 2rem;
             font-size: 2.5rem;
@@ -41,19 +41,19 @@
         .layout-footer {
             text-align: center;
             padding: 2rem;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(0, 0, 0, 0.7);
             margin-top: 4rem;
         }
 
         .ui-panel .ui-panel-titlebar {
-            background: rgba(255, 255, 255, 0.15) !important;
-            color: white !important;
+            background: rgba(0, 0, 0, 0.15) !important;
+            color: black !important;
             border: none !important;
         }
 
         .ui-panel .ui-panel-content {
-            background: rgba(255, 255, 255, 0.05) !important;
-            color: white !important;
+            background: rgba(0, 0, 0, 0.05) !important;
+            color: black !important;
         }
 
         .ui-datatable {
@@ -62,12 +62,12 @@
         }
 
         .ui-datatable th {
-            background: rgba(255, 255, 255, 0.2) !important;
-            color: white !important;
+            background: rgba(0, 0, 0, 0.2) !important;
+            color: #000000 !important;
         }
 
         .ui-datatable td {
-            color: white !important;
+            color: black !important;
         }
     </style>
 </h:head>
@@ -76,14 +76,10 @@
     <div class="layout-topbar">
         <h:form>
             <p:menubar style="background: transparent; border: none;">
-                <p:menuitem value="Dashboard" icon="pi pi-home"
-                            outcome="#{request.contextPath}dashboard.xhtml?faces-redirect=true"/>
-                <p:menuitem value="Productos" icon="pi pi-box"
-                            outcome="#{request.contextPath}productos.xhtml?faces-redirect=true"/>
-                <p:menuitem value="Categorías" icon="pi pi-tags"
-                            outcome="#{request.contextPath}categorias.xhtml?faces-redirect=true"/>
-                <p:menuitem value="Movimientos" icon="pi pi-arrows-h"
-                            outcome="#{request.contextPath}movimientos.xhtml?faces-redirect=true"/>
+                <p:menuitem value="Dashboard" icon="pi pi-home" url="#{request.contextPath}/inventario/dashboard.xhtml"/>
+                <p:menuitem value="Productos" icon="pi pi-box" url="#{request.contextPath}/inventario/productos.xhtml"/>
+                <p:menuitem value="Categorías" icon="pi pi-tags" url="#{request.contextPath}/inventario/categorias.xhtml"/>
+                <p:menuitem value="Movimientos" icon="pi pi-arrows-h" url="#{request.contextPath}/inventario/movimientos.xhtml"/>
             </p:menubar>
         </h:form>
     </div>

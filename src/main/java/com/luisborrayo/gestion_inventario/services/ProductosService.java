@@ -1,14 +1,17 @@
 package com.luisborrayo.gestion_inventario.services;
 
-import com.luisborrayo.gestion_inventario.models.Categoria;
 import com.luisborrayo.gestion_inventario.models.Productos;
 import com.luisborrayo.gestion_inventario.repositories.ProductoRepository;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Named
+@ApplicationScoped
 public class ProductosService {
     @Inject
     private ProductoRepository productoRepository;

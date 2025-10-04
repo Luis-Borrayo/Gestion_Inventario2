@@ -2,6 +2,7 @@ package com.luisborrayo.gestion_inventario.repositories;
 
 import com.luisborrayo.gestion_inventario.models.MovimientoStock;
 import com.luisborrayo.gestion_inventario.models.Productos;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
@@ -15,12 +16,13 @@ import java.util.List;
 /**
  * Repository para Movimientos de Stock
  */
+
+@ApplicationScoped
 public class MovimientoStockRepository {
 
     @PersistenceContext
     private EntityManager em;
 
-    // ==================== LÍNEA AZUL: Registrar Entrada y Salida ====================
     @Transactional
     public void save(MovimientoStock movimiento) {
         em.persist(movimiento);
@@ -38,14 +40,9 @@ public class MovimientoStockRepository {
                         "SELECT MAX(m.fecha) FROM MovimientoStock m", LocalDateTime.class)
                 .getSingleResult();
     }
-    /**
-     * LÍNEA AZUL: Registrar Entrada
-     * Registra entrada de stock (fecha, cantidad, motivo, producto)
-     * Actualiza el stockActual del producto
-     */
+
     @Transactional
     public MovimientoStock registrarEntrada(Long productoId, Integer cantidad, String motivo) {
-        // Crear movimiento
         MovimientoStock movimiento = new MovimientoStock();
         movimiento.setProductoId(productoId);
         movimiento.setTipo("ENTRADA");
@@ -64,12 +61,7 @@ public class MovimientoStockRepository {
         return movimiento;
     }
 
-    /**
-     * LÍNEA AZUL: Registrar Salida
-     * Registra salida de stock (fecha, cantidad, motivo, producto)
-     * Actualiza el stockActual del producto
-     * LÍNEA VERDE: Valida que la salida no deje stock negativo
-     */
+
     @Transactional
     public MovimientoStock registrarSalida(Long productoId, Integer cantidad, String motivo) {
         Productos producto = em.find(Productos.class, productoId);
@@ -86,7 +78,6 @@ public class MovimientoStockRepository {
                     producto.getStock() + ", cantidad solicitada: " + cantidad);
         }
 
-        // Crear y guardar movimiento
         MovimientoStock movimiento = new MovimientoStock();
         movimiento.setProductoId(productoId);
         movimiento.setTipo("SALIDA");
@@ -95,18 +86,12 @@ public class MovimientoStockRepository {
         movimiento.setFecha(LocalDate.now());
         em.persist(movimiento);
 
-        // Actualizar stock
         producto.setStock(producto.getStock() - cantidad);
         em.merge(producto);
 
         return movimiento;
     }
 
-    // ==================== LÍNEA AZUL: Listado con filtros ====================
-
-    /**
-     * LÍNEA AZUL: Listado con filtros por producto, tipo y rango de fechas
-     */
     public List<MovimientoStock> listarConFiltros(
             Long productoId,
             String tipo,
@@ -119,17 +104,14 @@ public class MovimientoStockRepository {
 
         List<Predicate> predicates = new ArrayList<>();
 
-        // Filtro por producto
         if (productoId != null) {
             predicates.add(cb.equal(root.get("productoId"), productoId));
         }
 
-        // Filtro por tipo (ENTRADA/SALIDA)
         if (tipo != null && !tipo.isEmpty()) {
             predicates.add(cb.equal(root.get("tipo"), tipo));
         }
 
-        // Filtro por rango de fechas
         if (fechaDesde != null) {
             predicates.add(cb.greaterThanOrEqualTo(root.get("fecha"), fechaDesde));
         }
@@ -143,26 +125,16 @@ public class MovimientoStockRepository {
         return em.createQuery(query).getResultList();
     }
 
-    // ==================== LÍNEA ROSA: Métodos adicionales ====================
-
-    /**
-     * LÍNEA ROSA: Obtener todos los movimientos
-     */
     public List<MovimientoStock> findAll() {
         return em.createQuery("SELECT m FROM MovimientoStock m ORDER BY m.fecha DESC",
                 MovimientoStock.class).getResultList();
     }
 
-    /**
-     * LÍNEA ROSA: Buscar movimiento por ID
-     */
     public MovimientoStock findById(Long id) {
         return em.find(MovimientoStock.class, id);
     }
 
-    /**
-     * LÍNEA ROSA: Obtener últimos N movimientos
-     */
+
     public List<MovimientoStock> getUltimosMovimientos(int cantidad) {
         return em.createQuery(
                         "SELECT m FROM MovimientoStock m ORDER BY m.fecha DESC",
@@ -171,9 +143,6 @@ public class MovimientoStockRepository {
                 .getResultList();
     }
 
-    /**
-     * LÍNEA ROSA: Contar movimientos por producto
-     */
     public Long contarMovimientosPorProducto(Long productoId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);

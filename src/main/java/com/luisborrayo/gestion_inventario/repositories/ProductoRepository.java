@@ -3,6 +3,7 @@ package com.luisborrayo.gestion_inventario.repositories;
 import com.luisborrayo.gestion_inventario.models.Categoria;
 import com.luisborrayo.gestion_inventario.models.MovimientoStock;
 import com.luisborrayo.gestion_inventario.models.Productos;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -17,12 +18,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@ApplicationScoped
 public class ProductoRepository {
     @PersistenceContext
     private EntityManager em;
 
-    //CRUD completo.
-    //Al registrar/editar, validar campos obligatorios y rangos (precio, stock).
     @Transactional
     public void save(Productos producto) {
         if (producto.getNombre() == null || producto.getNombre().isBlank()) {
@@ -109,7 +109,6 @@ public class ProductoRepository {
         return count > 0;
     }
 
-    //Listado con búsqueda y filtros combinables (por nombre, categoría, precio mínimo/máximo, activo, rango de fechas).
     public List<Productos> buscarconFiltro(String nombre, Categoria categoria, BigDecimal preciomin, BigDecimal preciomax,
                                            Productos.Estado estado, Integer stockmin, Integer stockmax, int page, int pageSize, String sortBy,
                                            boolean asc) {
@@ -154,9 +153,6 @@ public class ProductoRepository {
         return query.getResultList();
     }
 
-    // ==================== LÍNEAS AZULES - KPIs DASHBOARD ====================
-
-    // KPI: Total de productos
     public Long getTotalProductos() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
@@ -165,7 +161,6 @@ public class ProductoRepository {
         return em.createQuery(query).getSingleResult();
     }
 
-    // KPI: Productos con stock bajo (umbral configurable)
     public Long getProductosStockBajo(Integer umbral) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
@@ -175,7 +170,6 @@ public class ProductoRepository {
         return em.createQuery(query).getSingleResult();
     }
 
-    // KPI: Productos inactivos
     public Long getProductosInactivos() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
@@ -185,19 +179,15 @@ public class ProductoRepository {
         return em.createQuery(query).getSingleResult();
     }
 
-    // ==================== LÍNEAS ROSAS - Creado por Lourdes ====================
-
-    // LÍNEA ROSA: Total de categorías
     public Long getTotalCategorias() {
         String jpql = "SELECT COUNT(DISTINCT p.categoria) FROM Productos p";
         return em.createQuery(jpql, Long.class).getSingleResult();
     }
 
-    // LÍNEA ROSA: Movimientos registrados esta semana
     public Long getMovimientosEstaSemana() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
-        Root<MovimientoStockRepository> root = query.from(MovimientoStockRepository.class);
+        Root<MovimientoStock> root = query.from(MovimientoStock.class);
 
         LocalDate inicioSemana = LocalDate.now().minusDays(7);
 
@@ -207,18 +197,17 @@ public class ProductoRepository {
         return em.createQuery(query).getSingleResult();
     }
 
-    // LÍNEA ROSA: Fecha de última actualización de inventario
     public LocalDate getFechaUltimaActualizacion() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<LocalDate> query = cb.createQuery(LocalDate.class);
-        Root<MovimientoStock> root = query.from(MovimientoStock.class); // ✅ usar la entidad real
+        Root<MovimientoStock> root = query.from(MovimientoStock.class);
 
-        query.select(cb.greatest(root.<LocalDate>get("fecha"))); // ahora sí compila
+        query.select(cb.greatest(root.<LocalDate>get("fecha")));
 
         try {
             return em.createQuery(query).getSingleResult();
         } catch (Exception e) {
-            return null; // o LocalDate.now(), según prefieras
+            return null;
         }
     }
 }

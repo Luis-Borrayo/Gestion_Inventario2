@@ -3,12 +3,16 @@ package com.luisborrayo.gestion_inventario.Dashboard;
 import com.luisborrayo.gestion_inventario.repositories.CategoriaRepository;
 import com.luisborrayo.gestion_inventario.repositories.MovimientoStockRepository;
 import com.luisborrayo.gestion_inventario.repositories.ProductoRepository;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Named
+ @ApplicationScoped
 public class DashboardService {
     @Inject
     private ProductoRepository productoRepository;
@@ -36,14 +40,12 @@ public class DashboardService {
         return categoriaRepository.count();
     }
 
-    // 🔹 Movimientos registrados esta semana
     public long getMovimientosSemana() {
         LocalDate monday = LocalDate.now().with(DayOfWeek.MONDAY);
         LocalDateTime inicioSemana = monday.atStartOfDay();
         return movimientoStockRepository.countByFechaDesde(inicioSemana);
     }
 
-    // 🔹 Última actualización de inventario
     public LocalDateTime getUltimaActualizacionInventario() {
         return movimientoStockRepository.findMaxFecha();
     }

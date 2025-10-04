@@ -15,7 +15,7 @@ public class MovimientoStock {
     private Long productoId;
 
     @Column(nullable = false, length = 20)
-    private String tipo; // "ENTRADA" o "SALIDA"
+    private String tipo;
 
     @Column(nullable = false)
     private Integer cantidad;
@@ -38,7 +38,6 @@ public class MovimientoStock {
         this.motivo = motivo;
     }
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }

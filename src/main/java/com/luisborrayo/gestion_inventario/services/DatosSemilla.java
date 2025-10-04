@@ -1,7 +1,6 @@
 package com.luisborrayo.gestion_inventario.services;
 
 import com.luisborrayo.gestion_inventario.models.Categoria;
-import com.luisborrayo.gestion_inventario.models.MovimientoStock;
 import com.luisborrayo.gestion_inventario.models.Productos;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;

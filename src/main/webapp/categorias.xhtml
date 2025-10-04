@@ -7,18 +7,45 @@
     <ui:define name="content">
         <h1>🗂 Categorías</h1>
 
-        <h:form>
-            <p:dataTable var="c" value="#{categoriaBean.lista}"
-                         styleClass="glass-table">
+        <h:form id="formCategorias">
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:dataTable var="c" value="#{categoriaBean.lista}" editable="true" styleClass="glass-table">
+
                 <p:column headerText="ID">#{c.id}</p:column>
                 <p:column headerText="Nombre">#{c.nombre}</p:column>
                 <p:column headerText="Acciones">
-                    <p:commandButton icon="pi pi-pencil"
+                    <p:commandButton icon="pi pi-pencil" title="Editar"
+                                     actionListener="#{categoriaBean.prepararEdicion(c)}"
+                                     update=":dialogForm"
+                                     oncomplete="PF('dlgCategoria').show()"
                                      styleClass="p-button-rounded p-button-warning"/>
-                    <p:commandButton icon="pi pi-trash"
+                    <p:commandButton icon="pi pi-trash" title="Eliminar"
+                                     actionListener="#{categoriaBean.eliminar(c.id)}"
+                                     update="formCategorias"
                                      styleClass="p-button-rounded p-button-danger"/>
                 </p:column>
             </p:dataTable>
+
+            <p:commandButton value="Nueva Categoría"
+                             icon="pi pi-plus"
+                             onclick="PF('dlgCategoria').show(); return false;"
+                             styleClass="p-button-success" style="margin-top:1rem;"/>
         </h:form>
+
+        <p:dialog header="Categoría" widgetVar="dlgCategoria" modal="true" resizable="false">
+            <h:form id="dialogForm">
+                <p:panelGrid columns="2">
+                    <h:outputLabel for="nombre" value="Nombre:"/>
+                    <p:inputText id="nombre" value="#{categoriaBean.categoriaNueva.nombre}" required="true"/>
+                </p:panelGrid>
+
+                <p:commandButton value="Guardar"
+                                 actionListener="#{categoriaBean.guardar}"
+                                 update=":formCategorias"
+                                 oncomplete="PF('dlgCategoria').hide()"
+                                 styleClass="p-button-primary"/>
+            </h:form>
+        </p:dialog>
     </ui:define>
 </ui:composition>

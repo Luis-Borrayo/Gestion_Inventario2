@@ -7,13 +7,17 @@ import com.luisborrayo.gestion_inventario.models.Productos;
 import com.luisborrayo.gestion_inventario.repositories.CategoriaRepository;
 import com.luisborrayo.gestion_inventario.repositories.MovimientoStockRepository;
 import com.luisborrayo.gestion_inventario.repositories.ProductoRepository;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+@Named
+@ApplicationScoped
 public class InventarioService {
 
     @Inject
@@ -30,8 +34,6 @@ public class InventarioService {
 
     @Inject
     private DashboardService dashboardService;
-
-    // ==================== PRODUCTOS ====================
 
     @Transactional
     public void agregarProducto(Productos producto) {
@@ -67,8 +69,6 @@ public class InventarioService {
                 pagina, pageSize, ordenarPor, ascendente
         );
     }
-
-    // ==================== CATEGORÍAS ====================
 
     @Transactional
     public void agregarCategoria(Categoria categoria) {
